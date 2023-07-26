@@ -71,6 +71,10 @@ export class AppComponent {
                     link: '/components/select',
                 },
                 {
+                    label: 'Input',
+                    link: '/components/input'
+                },
+                {
                     label: 'Checkbox',
                     link: '/components/checkbox',
                 },
