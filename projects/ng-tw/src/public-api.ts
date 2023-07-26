@@ -35,3 +35,11 @@ export * from './modules/dropdown/dropdown-config.service';
 export * from './modules/radio/radio-button-item.interface';
 export * from './modules/radio/radio.component';
 export * from './modules/radio/radio.module';
+
+export * from './modules/input/input-config.interface';
+export * from './modules/input/input-config.service';
+export * from './modules/input/input.component';
+export * from './modules/input/input.module';
+
+export * from './modules/checkbox/checkbox.component';
+export * from './modules/checkbox/checkbox.module';

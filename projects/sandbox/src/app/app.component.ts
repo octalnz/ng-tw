@@ -73,7 +73,15 @@ export class AppComponent {
                 {
                     label: 'Radio',
                     link: '/components/radio'
-                }
+                },
+                {
+                    label: 'Input',
+                    link: '/components/input'
+                },
+                {
+                    label: 'Checkbox',
+                    link: '/components/checkbox',
+                },
             ],
         },
     ];
