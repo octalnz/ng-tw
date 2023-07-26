@@ -73,7 +73,11 @@ export class AppComponent {
                 {
                     label: 'Input',
                     link: '/components/input'
-                }
+                },
+                {
+                    label: 'Checkbox',
+                    link: '/components/checkbox',
+                },
             ],
         },
     ];

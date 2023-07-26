@@ -36,3 +36,6 @@ export * from './modules/input/input-config.interface';
 export * from './modules/input/input-config.service';
 export * from './modules/input/input.component';
 export * from './modules/input/input.module';
+
+export * from './modules/checkbox/checkbox.component';
+export * from './modules/checkbox/checkbox.module';
