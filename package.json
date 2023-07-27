@@ -17,7 +17,7 @@
 		"build:ssr": "ng build && ng run sandbox:server",
 		"prerender": "ng run sandbox:prerender",
 		"sandbox:release": "ng run sandbox:prerender --configuration=production && ng deploy --no-build",
-		"postinstall": "ng build --project ng-tw --configuration npm-production"
+		"prepare": "ng build --project ng-tw --configuration npm-production"
 	},
 	"private": true,
 	"dependencies": {
