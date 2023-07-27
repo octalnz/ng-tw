@@ -42,7 +42,7 @@ jobs:
       - run: echo "registry=https://npm.pkg.github.com/@octalnz" >> .npmrc
       - uses: sergeysova/jq-action@v2
         with:
-          cmd: jq '.name="@octalnz/ng-tw"' package.json > package.json && cat package.json
+          cmd: jq '.name = "@octalnz/ng-tw"' package.json > package.json.new && mv package.json.new package.json
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
