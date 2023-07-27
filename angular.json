@@ -20,6 +20,10 @@
             },
             "development": {
               "tsConfig": "projects/ng-tw/tsconfig.lib.json"
+            },
+            "npm-production": {
+              "project": "projects/ng-tw/ng-package.npm.json",
+              "tsConfig": "projects/ng-tw/tsconfig.lib.prod.json"
             }
           },
           "defaultConfiguration": "production"
