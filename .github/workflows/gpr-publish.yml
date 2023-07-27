@@ -27,9 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
-      contents: read
     steps:
-      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -37,8 +35,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ng-tw-build
-          path: dist/ng-tw/
-      - run: cd ./dist/ng-tw
+          path: .
       - run: echo "registry=https://npm.pkg.github.com/@octalnz" >> .npmrc
       - uses: sergeysova/jq-action@v2
         with:
