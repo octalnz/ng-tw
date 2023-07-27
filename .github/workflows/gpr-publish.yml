@@ -14,7 +14,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: cd scripts && npm run build:prod
+      - run: npm i
+      - run: npm i -g @angular/cli
+      - run: ng build ng-tw --configuration production
 
   publish-npm:
     needs: build
@@ -28,6 +30,6 @@ jobs:
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
-      - run: cd scripts && npm run deploy:npm
+      - run: cd /dist/ng-tw && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
