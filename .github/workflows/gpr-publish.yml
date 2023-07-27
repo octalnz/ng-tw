@@ -38,6 +38,11 @@ jobs:
         with:
           name: ng-tw-build
           path: dist/ng-tw/
-      - run: cd ./dist/ng-tw && echo "registry=https://npm.pkg.github.com/@octalnz" >> .npmrc && npm publish
+      - run: cd ./dist/ng-tw
+      - run: echo "registry=https://npm.pkg.github.com/@octalnz" >> .npmrc
+      - uses: sergeysova/jq-action@v2
+        with:
+          cmd: jq '.name="@octalnz/ng-tw"' package.json > package.json && cat package.json
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
