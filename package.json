@@ -17,7 +17,7 @@
 		"build:ssr": "ng build && ng run sandbox:server",
 		"prerender": "ng run sandbox:prerender",
 		"sandbox:release": "ng run sandbox:prerender --configuration=production && ng deploy --no-build",
-		"prepare": "rm -rf dist/* && ng build --project ng-tw --configuration production && mv dist/ng-tw/* dist && rm -r dist/ng-tw"
+		"postinstall": "rm -rf dist/* && ng build --project ng-tw --configuration production && mv dist/ng-tw/* dist && rm -r dist/ng-tw"
 	},
 	"private": true,
 	"dependencies": {
