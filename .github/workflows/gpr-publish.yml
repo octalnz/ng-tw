@@ -38,6 +38,7 @@ jobs:
         with:
           name: ng-tw-build
           path: dist/ng-tw/
+      - run: echo "registry=https://npm.pkg.github.com/@octalnz" >> .npmrc
       - run: cd ./dist/ng-tw && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
