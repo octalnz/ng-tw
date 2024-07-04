@@ -210,6 +210,9 @@ export class CSelectRouteComponent implements OnInit {
     public selectWithInputControl: UntypedFormControl = new UntypedFormControl({ value: null, disabled: false });
     public selectWithModel: string = 'value-1';
 
+    public multiSelectControl: UntypedFormControl = new UntypedFormControl({ value: [], disabled: false });
+    multiSelectValues$ = this.multiSelectControl.valueChanges;
+
     constructor() {}
 
     ngOnInit(): void {

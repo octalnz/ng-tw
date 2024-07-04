@@ -1,6 +1,4 @@
-import { ENTER, hasModifierKey, SPACE } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as _ from 'lodash';
 import { difference } from 'lodash';
 import { TwSelectConfig } from '../select/select-config.interface';
 import { TwSelectConfigService } from '../select/select-config.service';
@@ -31,7 +29,7 @@ export class OptionSelectionChange<T = any> {
         '[attr.id]': 'id',
         '[attr.role]': 'option',
         '[class]': 'getClasses()',
-        '(click)': 'select(true)',
+        '(click)': 'onOptionSelected(true)',
     },
 })
 export class OptionComponent<T = any> implements OnInit {
@@ -66,23 +64,32 @@ export class OptionComponent<T = any> implements OnInit {
         this.onSelectionChange.emit(new OptionSelectionChange<T>(this, isUserInput, this.getInnerHTML()));
     }
 
-    /** Selects the option. */
-    select(isUserInput: boolean = false): void {
+    /**
+     * Handler for when an option is selected (e.g. it is clicked upon or actioned via keyboard).
+     *
+     * This emits an event for the parent element to handle. The parent is responsible for updating this component's
+     * state.
+     * */
+    onOptionSelected(isUserInput: boolean = false): void {
         //
         // Validate disabled and alredy selected
-        if (this.disabled) return;
+        if (this.disabled) {
+            return;
+        }
 
         //
         // Select and emit event
         this._emitSelectionChangeEvent(isUserInput);
-        // set select if we have a value
-        if (this.value) this.selected = true;
     }
 
-    deselect(isUserInput: boolean = false): void {
-        //
-        // Deselect and emit event
-        this.selected = false;
+    /**
+     * `Selects the option while indicating the selection came from the user. Used to
+     * determine if the select's view -> model callback should be invoked.`
+     */
+    selectViaInteraction(): void {
+        if (!this.disabled) {
+            this._emitSelectionChangeEvent(true);
+        }
     }
 
     /**
@@ -126,17 +133,6 @@ export class OptionComponent<T = any> implements OnInit {
 
     getInnerHTML(forceHTML: boolean = false): string | null {
         return this.textOnly !== false && forceHTML === false ? this.getLabel() : this.contentElement?.nativeElement?.innerHTML || null;
-    }
-
-    /**
-     * `Selects the option while indicating the selection came from the user. Used to
-     * determine if the select's view -> model callback should be invoked.`
-     */
-    selectViaInteraction(): void {
-        if (!this.disabled) {
-            this.selected = true;
-            this._emitSelectionChangeEvent(true);
-        }
     }
 
     scrollIntoView() {
