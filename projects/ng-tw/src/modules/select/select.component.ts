@@ -193,6 +193,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
                 this._multiple
                     ? this.newOptionsSet(this.innerValues, null, false, true)
                     : this.selectOption(this.innerValue, null ,false, true);
+                this.cdr.markForCheck();
             });
         });
     }
