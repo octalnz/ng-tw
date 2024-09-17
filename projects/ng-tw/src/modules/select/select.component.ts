@@ -283,8 +283,10 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         //
         // Carry over selected options
+        const newValues: any[] = [];
         this.options.forEach(opt => {
             if (oldValues.find((oldValue: any) => this.compareWith(opt.value, oldValue))) {
+                newValues.push(opt.value);
                 opt.selected = true;
             } else {
                 opt.selected = false;
@@ -293,8 +295,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         //
         // Emit the new selected values.
-        this.innerValues = oldValues;
-        this.onChange(oldValues);
+        this.innerValues = newValues;
+        this.onChange(newValues);
 
         //
         // Update manager active item

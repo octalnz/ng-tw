@@ -19,7 +19,7 @@
     class="block truncate"
     [ngClass]="{'block': hasValue()}"
     [hidden]="!hasValue()">
-    {{ innerValues.length + " selected" }}
+    {{ this.innerValues.length }} selected
 </span>
 
 <style>
