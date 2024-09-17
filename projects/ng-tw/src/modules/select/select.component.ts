@@ -418,10 +418,6 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
         if (isUserInput === true) {
             this.markAsTouched();
         }
-
-        //
-        // Update manager active item
-        this._updateKeyManagerActiveItem(source.value);
     }
 
     handleKeydown(event: KeyboardEvent) {
