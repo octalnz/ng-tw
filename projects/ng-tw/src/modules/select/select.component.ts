@@ -276,6 +276,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
      * Handler for when the options of select component change (only for use in multi forms).
      */
     newOptionsSet(oldValues: any, innerHTML: string | null, touched: boolean, forceUpdate = false) {
+
         //
         // Skip if we don't have options
         if (!this.options) {
@@ -467,7 +468,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         this._keyManager.change.pipe().subscribe(() => {
             if (!this.isOpen && this._keyManager.activeItem) {
-                this._keyManager.activeItem.selectViaInteraction();
+                if (! this._multiple) {
+                    // TODO causes a bug in multi-selects where the first item is (de)selected on init
+                    this._keyManager.activeItem.selectViaInteraction();
+                }
+
             }
         });
     }
