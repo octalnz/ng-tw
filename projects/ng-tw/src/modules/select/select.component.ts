@@ -193,6 +193,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
                 this._multiple
                     ? this.newOptionsSet(this.innerValues, null, false, true)
                     : this.selectOption(this.innerValue, null ,false, true);
+                this.cdr.markForCheck();
             });
         });
     }
@@ -275,6 +276,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
      * Handler for when the options of select component change (only for use in multi forms).
      */
     newOptionsSet(oldValues: any, innerHTML: string | null, touched: boolean, forceUpdate = false) {
+
         //
         // Skip if we don't have options
         if (!this.options) {
@@ -283,8 +285,10 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         //
         // Carry over selected options
+        const newValues: any[] = [];
         this.options.forEach(opt => {
             if (oldValues.find((oldValue: any) => this.compareWith(opt.value, oldValue))) {
+                newValues.push(opt.value);
                 opt.selected = true;
             } else {
                 opt.selected = false;
@@ -293,8 +297,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         //
         // Emit the new selected values.
-        this.innerValues = oldValues;
-        this.onChange(oldValues);
+        this.innerValues = newValues;
+        this.onChange(newValues);
 
         //
         // Update manager active item
@@ -415,10 +419,6 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
         if (isUserInput === true) {
             this.markAsTouched();
         }
-
-        //
-        // Update manager active item
-        this._updateKeyManagerActiveItem(source.value);
     }
 
     handleKeydown(event: KeyboardEvent) {
@@ -468,7 +468,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         this._keyManager.change.pipe().subscribe(() => {
             if (!this.isOpen && this._keyManager.activeItem) {
-                this._keyManager.activeItem.selectViaInteraction();
+                if (! this._multiple) {
+                    // TODO causes a bug in multi-selects where the first item is (de)selected on init
+                    this._keyManager.activeItem.selectViaInteraction();
+                }
+
             }
         });
     }

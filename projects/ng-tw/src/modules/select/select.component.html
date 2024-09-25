@@ -14,13 +14,21 @@
     [hidden]="!hasValue()"
 ></span>
 
-<span
-    *ngIf="_multiple"
-    class="block truncate"
-    [ngClass]="{'block': hasValue()}"
-    [hidden]="!hasValue()">
-    {{ innerValues.length + " selected" }}
-</span>
+<ng-container *ngIf="_multiple">
+    <span *ngIf="this.innerValues.length === this.options.length"
+          class="block truncate"
+          [ngClass]="{'block': hasValue()}"
+          [hidden]="!hasValue()">
+        All selected
+    </span>
+
+    <span *ngIf="this.innerValues.length !== this.options.length"
+          class="block truncate"
+          [ngClass]="{'block': hasValue()}"
+          [hidden]="!hasValue()">
+        {{ this.innerValues.length }} selected
+    </span>
+</ng-container>
 
 <style>
     .custom-arrow:empty {
