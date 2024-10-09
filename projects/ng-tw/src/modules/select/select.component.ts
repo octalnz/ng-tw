@@ -314,21 +314,19 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
         }
 
         //
-        // Skip if we don't have options
-        if (!this.options) {
-            return;
-        }
-
-        //
         // Set new values and emit
         newValues = newValues ?? [];  // treat null or undefined like empty list
-        this.options.forEach(opt => {
-            if (newValues.find((newValue: any) => this.compareWith(opt.value, newValue))) {
-                opt.selected = true;
-            } else {
-                opt.selected = false;
-            }
-        })
+        if (this.options) {
+            // The form could be set before any options have been rendered.
+
+            this.options.forEach(opt => {
+                if (newValues.find((newValue: any) => this.compareWith(opt.value, newValue))) {
+                    opt.selected = true;
+                } else {
+                    opt.selected = false;
+                }
+            })
+        }
 
         this.innerValues = newValues;
         this.onChange(this.innerValues);
@@ -340,7 +338,9 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
         //
         // Set focus to the first item
-        this._keyManager.setActiveItem(0);
+        if (this._keyManager) {
+            this._keyManager.setActiveItem(0);
+        }
     }
 
     selectOption(newValue: any, innerHTML: string | null, touched: boolean, forceUpdate = false) {
