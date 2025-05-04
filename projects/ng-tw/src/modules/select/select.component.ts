@@ -86,6 +86,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
         this._multiple = true;
     }
 
+    @Input()
+    set nullable(param: string) {
+        this._nullable = true;
+    }
+
     @ViewChild('arrowContainer', { static: true }) public arrowContainer!: ElementRef<HTMLDivElement>;
     @ViewChild('inputContainer', { static: true }) public inputContainer!: ElementRef<HTMLDivElement>;
     @ViewChild('trigger', { static: true }) public trigger!: ElementRef;
@@ -112,6 +117,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
     public isOpen: boolean = false;
     public overlayWidth!: string;
     public _multiple: boolean = false;
+    public _nullable: boolean = false;
 
     private _keyManager!: ActiveDescendantKeyManager<OptionComponent>;
     private _config: TwSelectConfig['select'] = this.selectConfig.config.select;
@@ -346,7 +352,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
     selectOption(newValue: any, innerHTML: string | null, touched: boolean, forceUpdate = false) {
         //
         // Do nothing if selected is the same as the current value
-        if (this.compareWith(this.innerValue, newValue) && forceUpdate === false) {
+        if (newValue !== undefined && this.compareWith(this.innerValue, newValue) && forceUpdate === false) {
             return;
         }
 
@@ -371,22 +377,28 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
 
     onSelect(source: OptionComponent, isUserInput: boolean, innerHTML: string | null) {
         //
-        // Validate value is different
-        if (this.innerValue === source.value) return this.closePanel();
+        // If you click on an option that is already selected, you deselect it (when in nullable mode).
+        const isDeselecting = this._nullable && source.selected
 
         //
-        // Loop options and deselect all except the selected one
+        // Validate value is different.
+        if (this.compareWith(this.innerValue, source.value) && !this._nullable) return this.closePanel();
+
+        //
+        // Deselect every option.
         this.options.forEach((option) => {
             if (option.selected === true && option.id !== source.id) {
                 option.selected = false;
             }
         });
 
-        source.selected = true;
+        //
+        // Select the option (if we are not deselecting it).
+        source.selected = !isDeselecting;
 
         //
         // Select option
-        this.selectOption(source.value, innerHTML, true);
+        this.selectOption(isDeselecting ? undefined : source.value, innerHTML, true);
 
         //
         // Close
