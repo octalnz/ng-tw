@@ -315,13 +315,21 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
      * Handler for when multiple options are set (only for use in multi forms).
      */
     setMultipleOptions(newValues: any, innerHTML: string | null, touched: boolean, forceUpdate = false) {
-        if (this.innerValues === newValues && forceUpdate === false) {
+
+        /**
+         * Determine whether the value of the select will change.
+         */
+        const previousValues = [... this.innerValues];
+        const willValueChange = previousValues.length !== newValues.length || previousValues.some((v, i) => ! this.compareWith(v, newValues[i]));
+
+        if (willValueChange && forceUpdate === false) {
             return;
         }
 
         //
         // Set new values and emit
         newValues = newValues ?? [];  // treat null or undefined like empty list
+
         if (this.options) {
             // The form could be set before any options have been rendered.
 
@@ -335,7 +343,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
         }
 
         this.innerValues = newValues;
-        this.onChange(this.innerValues);
+
+        // If the value changed, submit an onchange event.
+        if (willValueChange) {
+            this.onChange(this.innerValues);
+        }
 
         // Mark as touched if this was made by a user interaction
         if (touched === true) {
@@ -350,9 +362,12 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
     }
 
     selectOption(newValue: any, innerHTML: string | null, touched: boolean, forceUpdate = false) {
+
+        const willValueChange = ! this.compareWith(this.innerValue, newValue);
+
         //
         // Do nothing if selected is the same as the current value
-        if (newValue !== undefined && this.compareWith(this.innerValue, newValue) && forceUpdate === false) {
+        if (newValue !== undefined && !willValueChange && forceUpdate === false) {
             return;
         }
 
@@ -361,10 +376,15 @@ export class SelectComponent implements ControlValueAccessor, OnInit, AfterConte
         this.innerValue = newValue;
 
         //
-        // On change event
-        this.onChange(newValue);
+        // On change event if the value changed
+        if (willValueChange) {
+            this.onChange(newValue);
+        }
+
         // mark as touched if this was made by a user interaction
-        if (touched === true) this.markAsTouched();
+        if (touched === true) {
+            this.markAsTouched();
+        }
 
         //
         // Skip if we don't have options
